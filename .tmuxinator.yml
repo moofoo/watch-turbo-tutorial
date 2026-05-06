@@ -1,0 +1,32 @@
+# ./.tmuxinator.yml
+
+name: turbo-pnpm-tutorial
+root: ./
+
+on_project_exit: docker compose stop
+
+windows:
+  - logs:
+      panes:
+        - web:
+            - bash scripts/wait.sh web
+            - clear && docker compose logs --no-log-prefix -f web 2>&1 | grep "web:"
+        - prisma:
+            - bash scripts/wait.sh web
+            - clear && docker compose logs --no-log-prefix -f web 2>&1 | grep "database:"
+        - home: clear
+
+  - shell:
+      panes:
+        - web:
+            - bash scripts/wait.sh web
+            - clear && docker compose exec -w /usr/src/app/apps/web web bash
+        - psql:
+            - bash scripts/wait.sh db
+            - clear && docker compose exec db psql -U postgres -d app_db
+
+  - watch:
+      layout: main-vertical
+      panes:
+        - watch:
+            - docker compose up --watch

@@ -1,0 +1,67 @@
+volumes:
+  turbo_pnpm_prisma_db_data:
+
+networks:
+  turbo_pnpm_prisma_network:
+
+x-defaults: &defaults
+  init: true
+  tty: true
+  restart: on-failure:2
+  networks:
+    - turbo_pnpm_prisma_network
+
+services:
+  db:
+    <<: *defaults
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: app_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_PORT: 5436
+      PGPORT: 5436 # for psql
+    ports:
+      - "5436:5436"
+    volumes:
+      - turbo_pnpm_prisma_db_data:/var/lib/postgresql
+  web:
+    <<: *defaults
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:postgres@db:5436/app_db?schema=public
+    ports:
+      - "3000:3000"
+    command: turbo run dev --filter=web
+    build:
+      args:
+        APP: web
+      context: .
+    develop:
+      watch:
+        # Sync the nextjs app files
+        - action: sync
+          path: ./apps/web
+          target: /usr/src/app/apps/web
+          initial_sync: true
+
+        # Sync the schema.prisma and seed.ts files
+        - action: sync
+          path: ./packages/database/prisma
+          target: /usr/src/app/packages/database/prisma
+          initial_sync: true
+
+        # When prisma generates a new client, restart the container
+        - action: restart
+          path: ./packages/database/generated
+
+        # Rebuild when /apps/web deps change
+        - action: rebuild
+          path: ./apps/web/package.json
+
+        # Rebuild when /packages/database deps change
+        - action: rebuild
+          path: ./packages/database/package.json
+
+    depends_on:
+      - db

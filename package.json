@@ -1,0 +1,23 @@
+{
+  "name": "turborepo-prisma",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "deps-wipe": "rm -f pnpm-lock.yaml && rm -rf node_modules && rm -rf apps/web/node_modules && rm -rf packages/database/node_modules && rm -rf packages/database/generated",
+    "dckr-wipe": " docker compose rm -v -f && docker compose down -v --remove-orphans && docker network prune -f && docker volume prune -f -a && docker container prune -f && docker image prune -a -f",
+    "reset-the-world": "pnpm run deps-wipe && pnpm run dckr-wipe"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.3",
+    "turbo": "^2.9.9",
+    "typescript": "6.0.3"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
