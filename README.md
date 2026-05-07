@@ -247,7 +247,7 @@ To follow this example, you'll need to have cloned the [tutorial repo](https://g
 
 With the project running, if you open http://localhost:3000 in your browser you should see:
 
-![Localhost](https://github.com/moofoo/localhost_screenshot.png)
+![Localhost](https://github.com/moofoo/watch-turbo-tutorial/raw/refs/heads/main/localhost_screenshot.png)
 
 Let's update the Prisma schema as well as the seed script to see those changes reflected in the running service.
 
@@ -331,4 +331,4 @@ To call this, run `turbo run db:reset` in the project root.
 
 After running that command, you should see the following when you refresh http://localhost:3000 in the browser:
 
-![Localhost](https://github.com/moofoo/localhost_changed_screenshot.png)
+![Localhost](https://github.com/moofoo/watch-turbo-tutorial/raw/refs/heads/main/localhost_changed_screenshot.png)
