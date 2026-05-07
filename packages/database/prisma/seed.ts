@@ -15,12 +15,10 @@ const userData: Prisma.UserCreateInput[] = [
   {
     name: "Alice",
     email: "alice@prisma.io",
-    age: 29,
   },
   {
     name: "Bob",
     email: "bob@prisma.io",
-    age: 32,
   },
 ];
 
