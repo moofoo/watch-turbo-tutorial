@@ -14,7 +14,9 @@ The method of bind-mounting code into a Node image container and creating an ano
 
 This tutorial will show how to use [Turborepo](https://turborepo.dev/) and the [PNPM package manager](https://pnpm.io/) with the Docker Compose Watch feature to create a smooth development experience, and how to resolve some of the difficulties that arise when trying to deal with shared packages that require a build or code-generation step in a monorepo setup.
 
-Here is the [Tutorial Repository](https://github.com/moofoo/watch-turbo-tutorial). To get this project up and running, first run [`bash scripts/init.sh`](https://github.com/moofoo/watch-turbo-tutorial/scripts/init.sh) in the repo directory. Then, you can start the project with `docker compose up --wait` or [`tmuxinator start`](https://dev.to/moofoo/docker-basics-using-tmux-and-tmuxinator-for-a-better-docker-compose-experience-43ma).
+
+
+Here is the [Tutorial Repository](https://github.com/moofoo/watch-turbo-tutorial). To get this project up and running, first run [`bash scripts/init.sh`](https://github.com/moofoo/watch-turbo-tutorial/blob/main/scripts/init.sh) in the repo directory. Then, you can start the project with `docker compose up --wait` or [`tmuxinator start`](https://dev.to/moofoo/docker-basics-using-tmux-and-tmuxinator-for-a-better-docker-compose-experience-43ma).
 
 ## Required Packages
 
@@ -38,7 +40,7 @@ As far as goals, we want to be able to
 
 First, let's go over the Development Dockerfile. I say "development" Dockerfile because it makes use of Turborepo features that wouldn't make sense when building an image for production.
 
-You can view the full Dockerfile [here](https://github.com/moofoo/watch-turbo-tutorial/Dockerfile).
+You can view the full Dockerfile [here](https://github.com/moofoo/watch-turbo-tutorial/blob/main/Dockerfile).
 
 Let's go over what each layer does:
 
@@ -103,7 +105,7 @@ __The syntax of the filter flag (`--filter=${APP}^...`) here is significant:__ W
 
 ## The turbo.json file
 
-Before looking at docker-compose.yml and the Docker Compose Watch setup, let's look at the [turbo.json file](https://github.com/moofoo/watch-turbo-tutorial/turbo.json).
+Before looking at docker-compose.yml and the Docker Compose Watch setup, let's look at the [turbo.json file](https://github.com/moofoo/watch-turbo-tutorial/blob/main/turbo.json).
 
 ```json
 {
@@ -170,7 +172,7 @@ This makes it so Prisma generates its client whenever `turbo run dev` is called 
 
 ## The docker-compose.yml file
 
-I'm only going to talk about the `develop watch` config for the "web" Next.js service here. You can view the full docker-compose.yml file [here](https://github.com/moofoo/watch-turbo-tutorial/docker-compose.yml).
+I'm only going to talk about the `develop watch` config for the "web" Next.js service here. You can view the full docker-compose.yml file [here](https://github.com/moofoo/watch-turbo-tutorial/blob/main/docker-compose.yml).
 
 ```yaml
 services:
@@ -211,7 +213,7 @@ Let's go over each Watch action:
   initial_sync: true
 ```
 
-This synchronizes the Nest.js app's source files with those in the container when the compose project starts up and whenever they change. Files/directories we DON'T want to sync are listed in a [.dockerignore file](https://github.com/moofoo/watch-turbo-tutorial/apps/web/.dockerignore).
+This synchronizes the Nest.js app's source files with those in the container when the compose project starts up and whenever they change. Files/directories we DON'T want to sync are listed in a [.dockerignore file](https://github.com/moofoo/watch-turbo-tutorial/blob/main/apps/web/.dockerignore).
 
 ```yaml
 - action: sync
@@ -251,7 +253,7 @@ With the project running, if you open http://localhost:3000 in your browser you 
 
 Let's update the Prisma schema as well as the seed script to see those changes reflected in the running service.
 
-First, open [`/packages/database/prisma/schema.prisma`](https://github.com/moofoo/watch-turbo-tutorial/packages/database/prisma/schema.prisma) and add a nullable Int column named "age" to the User model. After doing that, the schema file should look like so:
+First, open [`/packages/database/prisma/schema.prisma`](https://github.com/moofoo/watch-turbo-tutorial/blob/main/packages/database/prisma/schema.prisma) and add a nullable Int column named "age" to the User model. After doing that, the schema file should look like so:
 
 ```
 generator client {
@@ -277,7 +279,7 @@ model User {
 
 ```
 
-Next, open up [`/packages/database/prisma/seed.ts`](https://github.com/moofoo/watch-turbo-tutorial/packages/database/prisma/seed.ts) and add ages for the two Users in the seed data. After making those changes, the file should look like this:
+Next, open up [`/packages/database/prisma/seed.ts`](https://github.com/moofoo/watch-turbo-tutorial/blob/main/packages/database/prisma/seed.ts) and add ages for the two Users in the seed data. After making those changes, the file should look like this:
 
 ```ts
 import { PrismaClient, Prisma } from "../generated/prisma/client";
